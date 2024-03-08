@@ -5,7 +5,6 @@ import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.controller.request.UserLoginRequest;
 import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.awt.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,7 +38,7 @@ class UserControllerTest {
         String username = "username";
         String password = "password";
 
-        when(userService.join()).thenReturn(mock(User.class));
+        when(userService.join(username, password)).thenReturn(mock(User.class));
 
         mockMvc.perform(post("/api/v1/users/join")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +53,7 @@ class UserControllerTest {
         String username = "username";
         String password = "password";
 
-        when(userService.join()).thenThrow(new SnsApplicationException());
+        when(userService.join(username, password)).thenThrow(new SnsApplicationException());
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +68,7 @@ class UserControllerTest {
         String username = "username";
         String password = "password";
 
-        when(userService.login()).thenReturn("test_token");
+        when(userService.login(username, password)).thenReturn("test_token");
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +83,7 @@ class UserControllerTest {
         String username = "username";
         String password = "password";
 
-        when(userService.login()).thenReturn("test_token");
+        when(userService.login(username, password)).thenReturn("test_token");
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -111,5 +107,4 @@ class UserControllerTest {
                 .andExpect(status().isOk());
 
     }
-
 }
