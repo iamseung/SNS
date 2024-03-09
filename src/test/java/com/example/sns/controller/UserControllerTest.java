@@ -3,6 +3,7 @@ package com.example.sns.controller;
 import com.example.sns.Entity.User;
 import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.controller.request.UserLoginRequest;
+import com.example.sns.exception.ErrorCode;
 import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +54,7 @@ class UserControllerTest {
         String username = "username";
         String password = "password";
 
-        when(userService.join(username, password)).thenThrow(new SnsApplicationException());
+        when(userService.join(username, password)).thenThrow(new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("userName is %s", "")));
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +99,7 @@ class UserControllerTest {
         String username = "username";
         String password = "password";
 
-        when(userService.login()).thenReturn("test_token");
+        when(userService.login(username, password)).thenReturn("test_token");
 
         mockMvc.perform(post("/api/v1/users/login")
                         .contentType(MediaType.APPLICATION_JSON)
